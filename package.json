@@ -22,7 +22,6 @@
       "es2015"
     ]
   },
-  "type": "module",
   "dependencies": {
     "immutable": "^3.8.2"
   }

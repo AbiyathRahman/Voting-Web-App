@@ -1,7 +1,7 @@
+const { expect } = require('chai');
 const { List, Map } = require('immutable');
-import {expect} from 'chai';
 
-import {setEntries, next} from '../src/core.js';
+const { setEntries, next, vote } = require('../src/core.js');
 
 describe('application logic', () =>{
     describe('setEntries', () => {
