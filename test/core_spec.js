@@ -1,7 +1,7 @@
-import {List, Map} from 'immutable';
+const { List, Map } = require('immutable');
 import {expect} from 'chai';
 
-import {setEntries, next} from '../src/core';
+import {setEntries, next} from '../src/core.js';
 
 describe('application logic', () =>{
     describe('setEntries', () => {
@@ -28,26 +28,77 @@ describe('application logic', () =>{
     describe('next', () => {
         it('takes the next two entries under vote', () => {
             const state = Map({
-                entries: List.of('F1', 'Ballerina', 'SUperman')
+                entries: List.of('F1', 'Ballerina', 'Superman', 'MI7')
             });
             const nextState = next(state);
             expect(nextState).to.equal(Map({
                 vote: Map({
                     pair: List.of("F1",'Ballerina')
                 }),
-                entries: List.of('Superman')
+                entries: List.of('Superman', 'MI7')
             }));
         });
+        it('puts winner of current vote back to entries', () =>{
+            const state = Map({
+                vote: Map({
+                    pair: List.of('F1', 'Ballerina'),
+                    tally: Map({
+                        'F1':3,
+                        'Ballerina':2
+                    })
+                }),
+                entries: List.of('Superman', 'MI7')
+            });
+            const nextState = next(state);
+            expect(nextState).to.equal(Map({
+                vote: Map({
+                    pair: List.of('Superman', 'MI7')
+                }),
+                entries: List.of('F1')
+            }));
+        });
+        it('puts both from the tied votes', () =>{
+            const state = Map({
+                vote: Map({
+                    pair: List.of('F1', 'Ballerina'),
+                    tally: Map({
+                        'F1':3,
+                        'Ballerina':3
+                    })
+                }),
+                entries: List.of('Superman', 'MI7')
+        });
+        const nextState = next(state);
+        expect(nextState).to.equal(Map({
+            vote: Map({
+                pair: List.of('Superman', 'MI7')
+            }),
+            entries: List.of('F1', 'Ballerina')
+        }));
+        it('marks winner when one entry is left', () => {
+            const state = Map({
+                vote: Map({
+                    pair: List.of('F1', 'M1'),
+                    tally: Map({
+                        'F1':3,
+                        'MI7': 4
+                    })
+                }),
+                entries: List()
+            });
+            const nextState = next(state);
+            expect(nextState).to.equal(Map({
+                winner: 'MI7'
+            }));
+        });
+    });
     });
 
     describe('vote', () => {
         it('creates tally for the voted entry', () => {
             const state = Map({
                 vote: Map({
-                    pair: List.of('F1', 'Ballerina'),
-                    tally: Map({
-                        'F1': 1
-                    })
+                    pair: List.of('F1', 'Ballerina')
                 }),
                 entries: List()  
             });
@@ -86,5 +137,6 @@ describe('application logic', () =>{
                 entries: List()
         }));
     });
+    
     });
 });

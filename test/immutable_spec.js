@@ -1,6 +1,5 @@
 import {expect} from 'chai';
-import Immutable from 'immutable';
-const { List } = Immutable;
+import { List } from 'immutable';
 
 describe('immutability', () => {
     describe('a number', () => {
