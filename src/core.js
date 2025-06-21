@@ -35,6 +35,6 @@ function getWinner(vote){
     else if (aVotes < bVotes) return [b];
     else return [a , b];
 }
-const INITIAL_STATE = Map();
+const INITIAL_STATE = new Map();
 
 module.exports = { setEntries, next, vote, INITIAL_STATE };
